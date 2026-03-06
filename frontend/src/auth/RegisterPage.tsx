@@ -1,21 +1,78 @@
 import React, { useState } from 'react';
 import { ArrowRight, Lock, Mail, User } from 'lucide-react';
 import AuthLayout from './AuthLayout';
-import axios from 'axios';
+import authService from './authService';
+
+// Password validation - must match backend regex
+const validatePassword = (password: string): string | null => {
+  if (password.length < 8) {
+    return 'Password must be at least 8 characters';
+  }
+  if (!/[a-z]/.test(password)) {
+    return 'Password must contain at least one lowercase letter';
+  }
+  if (!/[A-Z]/.test(password)) {
+    return 'Password must contain at least one uppercase letter';
+  }
+  if (!/\d/.test(password)) {
+    return 'Password must contain at least one number';
+  }
+  if (!/[@$!%*?&_\-+=]/.test(password)) {
+    return 'Password must contain at least one special character (@$!%*?&_+-=)';
+  }
+  return null;
+};
 
 const RegisterPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    // Validate on change for immediate feedback
+    const validationError = validatePassword(value);
+    setPasswordError(validationError || '');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess(false);
+
+    // Validate password on submit
+    const validationError = validatePassword(password);
+    if (validationError) {
+      setPasswordError(validationError);
+      setError(validationError);
+      return;
+    }
+
     setLoading(true);
+
     try {
-      await axios.post('/auth/register', { fullName, email, password });
-    } catch (err) {
-      console.error(err);
+      const response = await authService.register({ fullName, email, password });
+      authService.setAuth(response);
+      setSuccess(true);
+      
+      // Redirect to dashboard after successful registration
+      window.location.href = '/dashboard';
+    } catch (err: any) {
+      if (err.response?.status === 409) {
+        setError('An account with this email already exists.');
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.response?.data?.errors) {
+        // Handle validation errors
+        const errors = err.response.data.errors;
+        setError(Object.values(errors).flat().join(', '));
+      } else {
+        setError('Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -23,6 +80,7 @@ const RegisterPage: React.FC = () => {
 
   const handleGoogleSignIn = () => {
     // TODO: implement oauth redirect
+    console.log('Google sign in clicked');
   };
 
   return (
@@ -32,10 +90,22 @@ const RegisterPage: React.FC = () => {
         Sign up as a student to start booking consultations
       </p>
 
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
+          <p className="text-sm text-green-600">Registration successful! Redirecting...</p>
+        </div>
+      )}
+
       <div className="mb-6">
         <button
           type="button"
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2"
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 hover:bg-gray-50"
           onClick={handleGoogleSignIn}
           disabled={loading}
         >
@@ -59,7 +129,7 @@ const RegisterPage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="fullName">Full Name</label>
+          <label htmlFor="fullName" className="block text-sm font-medium text-foreground">Full Name</label>
           <div className="relative mt-1.5">
             <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -67,14 +137,15 @@ const RegisterPage: React.FC = () => {
               placeholder="John Doe"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="pl-10 w-full border rounded-md p-2"
+              className="pl-10 w-full border rounded-md p-2 focus:ring-2 focus:ring-amber focus:border-transparent"
               required
+              disabled={loading}
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium text-foreground">Email</label>
           <div className="relative mt-1.5">
             <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -83,14 +154,15 @@ const RegisterPage: React.FC = () => {
               placeholder="you@university.edu"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 w-full border rounded-md p-2"
+              className="pl-10 w-full border rounded-md p-2 focus:ring-2 focus:ring-amber focus:border-transparent"
               required
+              disabled={loading}
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="block text-sm font-medium text-foreground">Password</label>
           <div className="relative mt-1.5">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -98,21 +170,40 @@ const RegisterPage: React.FC = () => {
               type="password"
               placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 w-full border rounded-md p-2"
-              minLength={6}
+              onChange={(e) => handlePasswordChange(e.target.value)}
+              className={`pl-10 w-full border rounded-md p-2 focus:ring-2 focus:ring-amber focus:border-transparent ${passwordError ? 'border-red-500' : ''}`}
               required
+              disabled={loading}
             />
           </div>
+          {passwordError ? (
+            <p className="mt-1 text-xs text-red-500">{passwordError}</p>
+          ) : (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Min 8 chars, with uppercase, lowercase, number, special char (@$!%*?&_+-=)
+            </p>
+          )}
         </div>
 
         <button
           type="submit"
-          className="w-full gradient-amber text-amber-foreground font-semibold shadow-amber border-0 hover:opacity-90 transition-opacity gap-2 flex items-center justify-center py-2"
+          className="w-full gradient-amber text-white font-semibold shadow-amber border-0 hover:opacity-90 transition-opacity gap-2 flex items-center justify-center py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading}
         >
-          {loading ? 'Please wait...' : 'Create Account'}
-          <ArrowRight className="h-4 w-4" />
+          {loading ? (
+            <>
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Creating account...
+            </>
+          ) : (
+            <>
+              Create Account
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
         </button>
       </form>
 
