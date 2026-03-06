@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom branding - left panel background */
+.gradient-hero {
+  background-color: #1d2e56;
+}
+
+/* auth button gradient */
+.gradient-amber {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+}
+
+.shadow-amber {
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3), 0 2px 4px -1px rgba(245, 158, 11, 0.2);
+}
+
+/* color variables for semantic names */
+.text-amber-foreground { color: #fff; }
+.bg-primary-foreground { background-color: #1f2937; }
+.text-primary-foreground { color: #1f2937; }
+
+/* button hover state */
+.gradient-amber:hover {
+  opacity: 0.9;
+}
