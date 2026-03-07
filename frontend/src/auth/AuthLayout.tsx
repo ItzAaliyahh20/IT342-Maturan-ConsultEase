@@ -5,9 +5,41 @@ import { GraduationCap } from 'lucide-react';
 interface AuthLayoutProps {
   children: React.ReactNode;
   isLogin: boolean;
+  isCentered?: boolean;
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children, isLogin }) => {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children, isLogin, isCentered = false }) => {
+  // For centered layout (admin login), show full-screen centered form without side panel
+  if (isCentered) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="w-full max-w-md">
+          {/* Logo and Title */}
+          <div className="text-center mb-8">
+            <Link to="/" className="inline-flex items-center gap-2 mb-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-hero">
+                <GraduationCap className="h-6 w-6 text-white" />
+              </div>
+            </Link>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Consult<span className="text-amber">Ease</span>
+            </h2>
+          </div>
+          
+          {/* Login Form Container */}
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            {children}
+          </div>
+          
+          {/* Footer */}
+          <p className="mt-6 text-center text-xs text-gray-500">
+            Authorized administrators only
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Left panel */}

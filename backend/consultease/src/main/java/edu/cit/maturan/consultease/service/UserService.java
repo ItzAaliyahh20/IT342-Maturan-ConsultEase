@@ -48,7 +48,7 @@ public class UserService {
             throw new DuplicateResourceException("Email already registered");
         }
 
-        // Create new faculty user with temporary password
+        // Create new faculty user with temporary password (stored directly in password_hash)
         User user = User.builder()
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getTemporaryPassword()))

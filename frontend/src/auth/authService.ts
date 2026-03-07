@@ -34,6 +34,12 @@ export interface ChangePasswordRequest {
   confirmPassword: string;
 }
 
+export interface CreateFacultyRequest {
+  fullName: string;
+  email: string;
+  temporaryPassword: string;
+}
+
 export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
@@ -68,6 +74,12 @@ export const authService = {
   // Change Password - PUT /auth/change-password
   async changePassword(data: ChangePasswordRequest): Promise<void> {
     await api.put('/auth/change-password', data);
+  },
+
+  // Create Faculty - POST /admin/faculty
+  async createFaculty(data: CreateFacultyRequest): Promise<User> {
+    const response = await api.post<User>('/admin/faculty', data);
+    return response.data;
   },
 
   // Save token and user to localStorage

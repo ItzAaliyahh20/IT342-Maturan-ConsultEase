@@ -30,8 +30,6 @@ const LoginPage: React.FC = () => {
       // Redirect based on role
       if (response.user.role === 'ADMIN') {
         window.location.href = '/admin';
-      } else if (response.user.role === 'FACULTY') {
-        window.location.href = '/dashboard';
       } else {
         window.location.href = '/dashboard';
       }
