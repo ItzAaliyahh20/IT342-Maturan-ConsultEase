@@ -34,6 +34,11 @@ const RegisterPage: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  // Set page title
+  useEffect(() => {
+    document.title = 'Register | ConsultEase';
+  }, []);
+
   // Redirect if already authenticated
   useEffect(() => {
     if (authService.isAuthenticated()) {

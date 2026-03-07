@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Lock, Eye, EyeOff } from 'lucide-react';
 import AuthLayout from './AuthLayout';
 import authService from './authService';
@@ -13,6 +13,11 @@ const ChangePasswordPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  // Set page title
+  useEffect(() => {
+    document.title = 'Change Password | ConsultEase';
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

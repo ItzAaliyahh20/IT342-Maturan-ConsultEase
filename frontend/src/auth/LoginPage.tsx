@@ -11,6 +11,11 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Set page title
+  useEffect(() => {
+    document.title = 'Login | ConsultEase';
+  }, []);
+
   // Redirect if already authenticated
   useEffect(() => {
     if (authService.isAuthenticated()) {

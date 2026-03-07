@@ -32,14 +32,6 @@ const AdminDashboard: React.FC = () => {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              {/* Green Add Faculty Button */}
-              <button
-                onClick={handleAddFaculty}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors"
-              >
-                <Plus className="h-4 w-4" />
-                Add Faculty...
-              </button>
               <span className="text-sm text-gray-600">
                 Welcome, {user?.fullName || 'Administrator'}
               </span>
@@ -57,10 +49,21 @@ const AdminDashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="mt-2 text-gray-600">Manage faculty, students, and system settings</p>
-        </div>
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <div>
+      <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+      <p className="mt-2 text-gray-600">Manage faculty, students, and system settings</p>
+    </div>
+
+    {/* Green Add Faculty Button - now aligned to the right */}
+    <button
+      onClick={handleAddFaculty}
+      className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors h-fit"
+    >
+      <Plus className="h-4 w-4" />
+      Add Faculty...
+    </button>
+  </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -121,14 +124,6 @@ const AdminDashboard: React.FC = () => {
                 <div className="text-left">
                   <p className="font-medium text-gray-900">Manage Faculty</p>
                   <p className="text-sm text-gray-500">Add or remove faculty accounts</p>
-                </div>
-              </button>
-
-              <button className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <Settings className="h-5 w-5 text-amber" />
-                <div className="text-left">
-                  <p className="font-medium text-gray-900">System Settings</p>
-                  <p className="text-sm text-gray-500">Configure system preferences</p>
                 </div>
               </button>
             </div>

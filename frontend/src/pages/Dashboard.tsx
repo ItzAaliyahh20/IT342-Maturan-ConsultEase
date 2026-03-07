@@ -18,6 +18,9 @@ const Dashboard: React.FC = () => {
     }
     setUser(currentUser);
     setLoading(false);
+    
+    // Set page title
+    document.title = 'Dashboard | ConsultEase';
   }, [navigate]);
 
   const handleLogout = async () => {
