@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Mail, User } from 'lucide-react';
+import { ArrowRight, Lock, Mail, User, UserPlus } from 'lucide-react';
 import AuthLayout from './AuthLayout';
 import authService from './authService';
 
@@ -99,10 +99,15 @@ const RegisterPage: React.FC = () => {
 
   return (
     <AuthLayout isLogin={false}>
-      <h1 className="mb-2 text-2xl font-bold text-foreground">Create account</h1>
-      <p className="mb-8 text-muted-foreground">
-        Sign up as a student to start booking consultations
-      </p>
+      <div className="flex flex-col items-center mb-6">
+        <div className="mb-4 p-4 bg-amber-100 rounded-full">
+          <UserPlus className="h-12 w-12 text-amber-600" />
+        </div>
+        <h1 className="mb-2 text-2xl font-bold text-foreground">Create account</h1>
+        <p className="text-muted-foreground">
+          Sign up as a student to start booking consultations
+        </p>
+      </div>
 
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">

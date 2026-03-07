@@ -5,7 +5,7 @@ import AuthLayout from './AuthLayout';
 import authService from './authService';
 
 // Set page title with shield icon
-document.title = '🛡️ Admin Portal - ConsultEase';
+document.title = 'Admin Portal - ConsultEase';
 
 const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();

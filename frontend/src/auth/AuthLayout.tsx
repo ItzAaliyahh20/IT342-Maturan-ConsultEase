@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Calendar, Users, BookOpen, Star } from 'lucide-react';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, isLogin, isCentered =
               </div>
             </Link>
             <h2 className="text-2xl font-bold text-gray-900">
-              Consult<span className="text-amber">Ease</span>
+              Consult<span className="text-amber-500">Ease</span>
             </h2>
           </div>
           
@@ -43,17 +43,69 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, isLogin, isCentered =
   return (
     <div className="flex min-h-screen">
       {/* Left panel */}
-      <div className="hidden w-1/2 gradient-hero lg:flex lg:flex-col lg:items-center lg:justify-center lg:p-12">
-        <div className="max-w-md text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
-            <GraduationCap className="h-8 w-8 text-white" />
+      <div className="hidden w-1/2 gradient-hero lg:flex lg:flex-col lg:items-center lg:justify-center lg:p-12 relative overflow-hidden">
+        {/* Animated decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Floating circles */}
+          <div className="absolute top-20 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse" style={{ animationDuration: '3s' }} />
+          <div className="absolute bottom-32 right-16 w-24 h-24 bg-white/10 rounded-full animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute top-1/3 right-10 w-16 h-16 bg-amber-500/20 rounded-full animate-pulse" style={{ animationDuration: '5s' }} />
+          
+          {/* Floating icons */}
+          <div className="absolute top-28 right-24 animate-bounce" style={{ animationDuration: '3s', animationDelay: '0.5s' }}>
+            <Calendar className="h-6 w-6 text-white/30" />
           </div>
-          <h2 className="mb-4 text-3xl font-bold text-white">
+          <div className="absolute bottom-40 left-16 animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }}>
+            <Users className="h-5 w-5 text-white/20" />
+          </div>
+          <div className="absolute top-1/2 left-1/4 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1.5s' }}>
+            <BookOpen className="h-5 w-5 text-white/25" />
+          </div>
+          
+          {/* Decorative dots pattern */}
+          <div className="absolute top-10 right-10 grid grid-cols-3 gap-2">
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 bg-white/20 rounded-full" />
+            ))}
+          </div>
+          
+          {/* Horizontal decorative lines */}
+          <div className="absolute bottom-20 left-10 right-10">
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          </div>
+        </div>
+
+        <div className="max-w-md text-center relative z-10">
+          {/* Logo with glow effect */}
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 animate-glow-pulse" style={{ animationDuration: '2s' }}>
+            <GraduationCap className="h-10 w-10 text-white" />
+          </div>
+          
+          {/* Animated title */}
+          <h2 className="mb-4 text-4xl font-bold text-white tracking-tight animate-fade-in-down">
             Consult<span style={{ color: '#F39C12' }}>Ease</span>
           </h2>
-          <p className="text-lg text-white/70">
-            Book faculty consultations effortlessly. No more waiting in long queues.
+          
+          {/* Animated subtitle */}
+          <p className="text-lg text-white/80 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            Book faculty consultations effortlessly.
           </p>
+          
+          {/* Feature highlights */}
+          <div className="space-y-3 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <div className="flex items-center justify-center gap-2 text-white/70">
+              <Star className="h-4 w-4 text-amber-400" />
+              <span className="text-sm">Easy scheduling</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-white/70">
+              <Star className="h-4 w-4 text-amber-400" />
+              <span className="text-sm">Real-time availability</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-white/70">
+              <Star className="h-4 w-4 text-amber-400" />
+              <span className="text-sm">Instant notifications</span>
+            </div>
+          </div>
         </div>
       </div>
 

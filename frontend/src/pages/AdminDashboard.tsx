@@ -28,7 +28,7 @@ const AdminDashboard: React.FC = () => {
                 <GraduationCap className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">
-                Consult<span className="text-amber">Ease</span> Admin
+                Consult<span className="text-amber-500">Ease</span>
               </span>
             </div>
             <div className="flex items-center gap-4">
