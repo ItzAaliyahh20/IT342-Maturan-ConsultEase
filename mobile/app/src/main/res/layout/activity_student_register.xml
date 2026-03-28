@@ -286,7 +286,7 @@
                 android:src="@drawable/ic_lock_outline"
                 app:tint="@color/button_accent" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -307,7 +307,7 @@
                     android:textSize="14sp"
                     android:inputType="textPassword"
                     android:imeOptions="actionDone" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <!-- Password Hint -->
@@ -321,21 +321,28 @@
             android:textSize="12sp" />
 
         <!-- Register Button - Solid Color -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/registerButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/bg_amber_gradient"
-            android:paddingHorizontal="16dp">
+            android:background="@drawable/bg_amber_gradient">
+
+            <ProgressBar
+                android:id="@+id/registerLoadingSpinner"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:indeterminateTint="@android:color/white" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/registerButtonContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center"
+                android:paddingHorizontal="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -353,7 +360,7 @@
                     android:src="@drawable/ic_arrow_forward"
                     app:tint="@android:color/white" />
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
 
         <!-- Login Link -->
         <LinearLayout

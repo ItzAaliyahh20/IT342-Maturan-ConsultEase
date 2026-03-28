@@ -7,6 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Patterns
 import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +24,6 @@ import com.example.consultease.dashboard.StudentDashboardActivity
 import com.example.consultease.network.RetrofitClient
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import retrofit2.Call
@@ -29,13 +32,15 @@ import retrofit2.Response
 
 class StudentRegisterActivity : AppCompatActivity() {
 
-    private lateinit var fullNameInput: TextInputEditText
-    private lateinit var emailInput: TextInputEditText
-    private lateinit var passwordInput: TextInputEditText
+    private lateinit var fullNameInput: EditText
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
     private lateinit var passwordLayout: TextInputLayout
     private lateinit var passwordHintText: TextView
-    private lateinit var registerButton: MaterialButton
-    private lateinit var googleSignInButton: MaterialButton
+    private lateinit var registerButton: FrameLayout
+    private lateinit var registerLoadingSpinner: ProgressBar
+    private lateinit var registerButtonContent: LinearLayout
+    private lateinit var googleSignInButton: View
     private lateinit var loginLinkText: TextView
 
     private lateinit var errorCard: MaterialCardView
@@ -62,6 +67,8 @@ class StudentRegisterActivity : AppCompatActivity() {
         passwordLayout = findViewById(R.id.passwordLayout)
         passwordHintText = findViewById(R.id.passwordHintText)
         registerButton = findViewById(R.id.registerButton)
+        registerLoadingSpinner = findViewById(R.id.registerLoadingSpinner)
+        registerButtonContent = findViewById(R.id.registerButtonContent)
         googleSignInButton = findViewById(R.id.googleSignInButton)
         loginLinkText = findViewById(R.id.loginLinkText)
 
@@ -209,7 +216,13 @@ class StudentRegisterActivity : AppCompatActivity() {
         emailInput.isEnabled = !loading
         passwordInput.isEnabled = !loading
 
-        registerButton.text = if (loading) "Creating account..." else "Create Account"
+        if (loading) {
+            registerLoadingSpinner.visibility = View.VISIBLE
+            registerButtonContent.visibility = View.GONE
+        } else {
+            registerLoadingSpinner.visibility = View.GONE
+            registerButtonContent.visibility = View.VISIBLE
+        }
     }
 
     private fun hideMessages() {

@@ -255,21 +255,28 @@
             android:gravity="end" />
 
         <!-- Login Button - Solid Color -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/bg_amber_gradient"
-            android:paddingHorizontal="16dp">
+            android:background="@drawable/bg_amber_gradient">
+
+            <ProgressBar
+                android:id="@+id/loadingSpinner"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:indeterminateTint="@android:color/white" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/loginButtonContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center"
+                android:paddingHorizontal="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -287,7 +294,7 @@
                     android:src="@drawable/ic_arrow_forward"
                     app:tint="@android:color/white" />
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
 
         <!-- Register Link -->
         <LinearLayout
