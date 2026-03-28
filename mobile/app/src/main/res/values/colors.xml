@@ -7,4 +7,41 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Background Colors -->
+    <color name="background_white">#FFFFFF</color>
+
+    <!-- Brand Colors -->
+    <color name="hero_navy">#1D2E56</color>
+    <color name="amber_start">#F59E0B</color>
+    <color name="amber_end">#D97706</color>
+    <color name="amber_light">#FEF3C7</color>
+    <color name="button_accent">#F1980A</color>
+
+    <!-- Text Colors -->
+    <color name="text_foreground">#000000</color>
+    <color name="text_muted">#6B7280</color>
+    <color name="text_amber">#D97706</color>
+
+    <!-- Border & Divider Colors -->
+    <color name="border_gray">#D1D5DB</color>
+    <color name="divider_gray">#E5E7EB</color>
+
+    <!-- Status Colors -->
+    <color name="error_bg">#FEF2F2</color>
+    <color name="error_border">#FECACA</color>
+    <color name="error_text">#DC2626</color>
+
+    <color name="success_bg">#ECFDF5</color>
+    <color name="success_border">#A7F3D0</color>
+    <color name="success_text">#059669</color>
+
+    <!-- Button Focus Colors -->
+    <color name="button_ripple">#F3F4F6</color>
+    <color name="button_ripple_amber">#FEF3C7</color>
+
+    <!-- Input Field Colors -->
+    <color name="text_input_stroke">@color/border_gray</color>
+    <color name="text_hint">#9CA3AF</color>
 </resources>
+
