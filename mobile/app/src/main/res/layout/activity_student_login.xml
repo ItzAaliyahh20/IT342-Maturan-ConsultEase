@@ -262,7 +262,7 @@
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@color/button_accent"
+            android:background="@drawable/bg_amber_gradient"
             android:paddingHorizontal="16dp">
 
             <LinearLayout
