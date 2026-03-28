@@ -40,24 +40,9 @@
                 android:background="@color/amber_light">
 
                 <ImageView
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:src="@drawable/ic_user_plus"
-                    android:layout_gravity="center"
-                    app:tint="@color/button_accent" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/amber_light"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_user_plus"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_graduation_cap"
                     android:layout_gravity="center"
                     app:tint="@color/button_accent" />
             </FrameLayout>
@@ -65,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create account"
+                android:text="Welcome back"
                 android:textColor="@color/text_foreground"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -75,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Sign up as a student to start booking consultations"
+                android:text="Sign in to continue"
                 android:textColor="@color/text_muted"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -118,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:text="Registration successful! Redirecting..."
+                android:text="Login successful! Redirecting..."
                 android:textColor="@color/success_text"
                 android:textSize="13sp" />
         </com.google.android.material.card.MaterialCardView>
@@ -177,47 +162,6 @@
                 android:layout_height="1dp"
                 android:layout_weight="1"
                 android:background="@color/border_gray" />
-        </LinearLayout>
-
-        <!-- Full Name Field -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Full Name"
-            android:textColor="@color/text_foreground"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/edit_text_background">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="12dp"
-                android:src="@drawable/ic_user_outline"
-                app:tint="@color/button_accent" />
-
-            <EditText
-                android:id="@+id/fullNameInput"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="12dp"
-                android:background="@android:color/transparent"
-                android:hint="John Doe"
-                android:textColor="@color/text_foreground"
-                android:textColorHint="@color/text_hint"
-                android:textSize="14sp"
-                android:inputType="textPersonName"
-                android:imeOptions="actionNext" />
         </LinearLayout>
 
         <!-- Email Field -->
@@ -302,19 +246,17 @@
                 android:imeOptions="actionDone" />
         </LinearLayout>
 
-        <!-- Password Hint -->
+        <!-- Forgot Password Link -->
         <TextView
-            android:id="@+id/passwordHintText"
+            android:id="@+id/forgotPasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="Min 8 chars, with uppercase, lowercase, number, special characters"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp" />
+            android:gravity="end" />
 
-        <!-- Register Button - Solid Color -->
+        <!-- Login Button - Solid Color -->
         <LinearLayout
-            android:id="@+id/registerButton"
+            android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
@@ -332,7 +274,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Create Account"
+                    android:text="Sign In"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="15sp"
@@ -347,29 +289,39 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Login Link -->
+        <!-- Register Link -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="24dp">
+            android:paddingBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Already have an account? "
+                android:text="Don't have an account? "
                 android:textColor="@color/text_muted"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/loginLinkText"
+                android:id="@+id/registerLinkText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign in"
+                android:text="Sign up"
                 android:textColor="@color/button_accent"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <!-- Faculty/Admin Note -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="24dp"
+            android:text="Faculty and Admin accounts are provided by the administrator."
+            android:textColor="@color/text_muted"
+            android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>
