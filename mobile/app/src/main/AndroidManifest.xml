@@ -20,6 +20,11 @@
             android:theme="@style/Theme.Consultease" />
 
         <activity
+            android:name=".dashboard.UserDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Consultease" />
+
+        <activity
             android:name=".auth.StudentRegisterActivity"
             android:exported="true"
             android:label="@string/app_name"

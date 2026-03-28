@@ -18,6 +18,15 @@ class AuthStorage(context: Context) {
 
     fun getToken(): String? = sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
 
+    fun getUser(): UserResponse? {
+        val userJson = sharedPreferences.getString(KEY_USER, null) ?: return null
+        return try {
+            gson.fromJson(userJson, UserResponse::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun clear() {
         sharedPreferences.edit().clear().apply()
     }
