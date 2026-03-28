@@ -2,6 +2,8 @@
 
 ConsultEase is a full-stack web application for faculty consultation booking, designed to streamline the process of scheduling appointments between students and faculty members.
 
+> **Note**: The current dashboard implementation is temporary and serves only to demonstrate proper user authentication functionality. Future development will include role-specific dashboards for students and faculty.
+
 ## Overview
 
 ConsultEase eliminates the need for physical queues by providing a digital platform where students can easily book consultation slots with their professors. The system supports role-based access for students, faculty, and administrators.
@@ -15,168 +17,155 @@ ConsultEase eliminates the need for physical queues by providing a digital platf
 - **Password Management**: Secure password change functionality for faculty
 
 ### User Features
-- **Student Portal**:
-  - Register and login with university email
-  - View available faculty and their consultation slots
-  - Book, view, and manage appointments
-  - Receive booking confirmations
-
-- **Faculty Portal**:
-  - Manage consultation availability
-  - View and manage student bookings
-  - Set weekly consultation schedules
-  - Accept or decline appointment requests
-
-- **Admin Dashboard**:
-  - Manage faculty accounts
-  - View system-wide statistics
-  - User management capabilities
-
-### UI/UX Features
-- Responsive design for mobile and desktop
-- Animated left panel with visual enhancements
-- Dynamic page titles
-- Loading states and error handling
-- Google OAuth integration (planned)
+- **Student Portal**: Register and login, view faculty, book consultations
+- **Faculty Portal**: Manage availability, view/manage bookings
+- **Admin Dashboard**: Manage faculty accounts, view statistics
 
 ## Technology Stack
 
-### Frontend
-- **Framework**: React 18 with TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **HTTP Client**: Axios with interceptors
-- **Routing**: React Router v6
+| Layer | Technology |
+|-------|------------|
+| Frontend | React 18, TypeScript, Tailwind CSS, Lucide React, Axios |
+| Backend | Spring Boot 3.x, Java 17, PostgreSQL, JWT |
+| Database | PostgreSQL (Supabase) with PgBouncer |
 
-### Backend
-- **Framework**: Spring Boot 3.x
-- **Language**: Java 17
-- **Database**: PostgreSQL (Supabase)
-- **Authentication**: JWT (Spring Security)
-- **ORM**: Spring Data JPA / Hibernate
-- **Connection Pooling**: PgBouncer
+---
+
+## User Authentication
+
+### User Types
+
+| Type | Description | Registration Method |
+|------|-------------|---------------------|
+| STUDENT | University students | Self-registration form (public) |
+| FACULTY | Professors/instructors | Created by Admin |
+| ADMIN | System administrators | Created by Admin |
+
+---
+
+### User Registration
+
+**Registration Fields:**
+- `fullName` - User's full name
+- `email` - University email address
+- `password` - Account password
+
+> **Note:** Faculty accounts are manually added by the administrator through the admin panel.
+
+**Validation Process:**
+- Email format validation
+- Password requirements: min 8 characters, uppercase, lowercase, number, special character
+- Frontend and backend validation
+
+**Duplicate Prevention:**
+- Backend checks if email already exists
+- Returns 409 Conflict if duplicate
+
+**Password Storage:**
+- BCrypt hashing with 12 rounds
+- Never stored in plain text
+
+---
+
+### User Login
+
+**Login Credentials:**
+- `email` - User's registered email
+- `password` - Account password
+
+**Verification Process:**
+1. Backend receives email/password
+2. Finds user by email in database
+3. Validates password using BCrypt
+4. Generates JWT token with user role
+5. Returns token + user info
+
+**After Successful Login:**
+- Token stored in localStorage
+- Redirect based on role:
+  - ADMIN → /admin
+  - STUDENT/FACULTY → /dashboard
+
+---
+
+### Database Table
+
+```
+Table: users
+Columns:
+  - id BIGINT (primary key, auto-generated)
+  - email VARCHAR(255) (unique)
+  - password VARCHAR(255) (BCrypt hashed)
+  - full_name VARCHAR(255)
+  - role VARCHAR(20) -- STUDENT, FACULTY, ADMIN
+  - created_at TIMESTAMP
+```
+
+---
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/register` | Student self-registration |
+| POST | `/auth/login` | User login |
+| POST | `/auth/change-password` | Change password (faculty) |
+| GET | `/auth/me` | Get current user |
+
+---
+
+### Role-Based Access Control
+
+**Backend Security:**
+- `/auth/login`, `/auth/register` - Public
+- `/auth/change-password` - Requires FACULTY or ADMIN
+- `/admin/**` - Requires ADMIN only
+- All other endpoints - Require authentication
+
+**Frontend Routing:**
+- Unauthenticated → /login
+- Authenticated accessing /login/register → /dashboard
+- ADMIN → /admin
+- STUDENT/FACULTY → /dashboard
+
+---
 
 ## Project Structure
 
 ```
 ConsultEase/
-├── frontend/                    # React frontend application
-│   ├── public/
-│   │   └── index.html         # HTML template
+├── frontend/                    # React frontend
 │   ├── src/
-│   │   ├── api/               # API configuration
-│   │   │   └── axios.ts       # Axios instance with interceptors
-│   │   ├── auth/              # Authentication components
-│   │   │   ├── AuthLayout.tsx
-│   │   │   ├── LoginPage.tsx
-│   │   │   ├── RegisterPage.tsx
-│   │   │   ├── ChangePasswordPage.tsx
-│   │   │   └── authService.ts
-│   │   ├── pages/             # Page components
-│   │   │   └── Dashboard.tsx
-│   │   ├── App.js             # Main app with routing
-│   │   └── index.css          # Global styles
-│   └── package.json
-│
-├── backend/                    # Spring Boot backend
-│   └── consultease/
-│       └── src/main/
-│           ├── java/edu/cit/maturan/consultease/
-│           │   ├── config/     # Configuration classes
-│           │   │   └── SecurityConfig.java
-│           │   ├── controller/ # REST controllers
-│           │   │   ├── AuthController.java
-│           │   │   └── AdminController.java
-│           │   ├── dto/        # Data Transfer Objects
-│           │   ├── entity/     # JPA entities
-│           │   │   └── User.java
-│           │   ├── exception/  # Exception handlers
-│           │   ├── repository/ # Data repositories
-│           │   ├── security/   # JWT utilities
-│           │   │   ├── JwtTokenProvider.java
-│           │   │   └── JwtAuthenticationFilter.java
-│           │   └── service/    # Business logic
-│           │       └── UserService.java
-│           └── resources/
-│               ├── application.properties
-│               └── migrations/ # SQL migrations
-│
+│   │   ├── api/axios.ts        # Axios with interceptors
+│   │   ├── auth/              # Auth components
+│   │   ├── pages/Dashboard.tsx
+│   │   └── App.js             # Routing
+├── backend/consultease/        # Spring Boot
+│   └── src/main/java/.../
+│       ├── config/SecurityConfig.java
+│       ├── controller/AuthController.java
+│       ├── entity/User.java
+│       └── security/JwtTokenProvider.java
 └── README.md
 ```
 
 ## Getting Started
 
-### Prerequisites
-- Node.js 18+ and npm
-- Java 17+
-- PostgreSQL database (local or Supabase)
-
-### Frontend Setup
-
+### Frontend
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-The frontend runs on http://localhost:3000
-
-### Backend Setup
-
-1. Configure database connection in `backend/consultease/src/main/resources/application.properties`
-
-2. Build and run:
+### Backend
 ```bash
 cd backend/consultease
 mvn spring-boot:run
 ```
 
-The backend runs on http://localhost:8080
-
-## API Endpoints
-
-### Authentication
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| POST | `/auth/login` | User login | Public |
-| POST | `/auth/register` | Student registration | Public |
-| POST | `/auth/change-password` | Change password | Faculty |
-| GET | `/auth/me` | Get current user | Authenticated |
-
-### Admin
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| POST | `/admin/faculty` | Create faculty account | Admin |
-| GET | `/admin/users` | List all users | Admin |
-
-## Database Schema
-
-### Users Table
-| Column | Type | Description |
-|--------|------|-------------|
-| id | BIGINT | Primary key |
-| email | VARCHAR(255) | Unique email |
-| password | VARCHAR(255) | BCrypt hashed |
-| full_name | VARCHAR(255) | User's full name |
-| role | VARCHAR(20) | STUDENT, FACULTY, ADMIN |
-| created_at | TIMESTAMP | Account creation time |
-
-## Environment Variables
-
-### Backend (application.properties)
-```properties
-# Database
-spring.datasource.url=jdbc:postgresql://host:port/database
-spring.datasource.username=username
-spring.datasource.password=password
-
-# JWT
-app.jwt.secret=your-256-bit-base64-secret-key
-app.jwt.expiration=86400000
-```
-
-### Frontend
-- API base URL is configured in `frontend/src/api/axios.ts`
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8080
 
 ## Security Features
 
@@ -185,7 +174,6 @@ app.jwt.expiration=86400000
 - Token expiration (24 hours)
 - Protected routes with auth guards
 - CORS configuration
-- Prepared statement cache disabled for PgBouncer compatibility
 
 ## Development Notes
 
