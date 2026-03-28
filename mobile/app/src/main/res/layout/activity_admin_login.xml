@@ -177,7 +177,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@color/button_accent"
+                android:background="@drawable/bg_amber_gradient"
                 android:paddingHorizontal="16dp">
 
                 <TextView
