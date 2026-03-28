@@ -2,6 +2,7 @@ package com.example.consultease.auth.storage
 
 import android.content.Context
 import com.example.consultease.auth.model.AuthResponse
+import com.example.consultease.auth.model.UserResponse
 import com.google.gson.Gson
 
 class AuthStorage(context: Context) {

@@ -26,6 +26,12 @@
 
         <activity
             android:name=".auth.StudentRegisterActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Consultease" />
+
+        <activity
+            android:name=".auth.StudentLoginActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Consultease">

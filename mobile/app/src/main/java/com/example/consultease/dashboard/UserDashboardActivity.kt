@@ -5,9 +5,8 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.consultease.R
-import com.example.consultease.auth.LoginActivity
+import com.example.consultease.auth.StudentLoginActivity
 import com.example.consultease.auth.storage.AuthStorage
-import com.example.consultease.auth.model.UserResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class UserDashboardActivity : AppCompatActivity() {
@@ -159,7 +158,7 @@ class UserDashboardActivity : AppCompatActivity() {
     }
     
     private fun navigateToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, StudentLoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()

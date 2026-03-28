@@ -286,20 +286,28 @@
                 android:src="@drawable/ic_lock_outline"
                 app:tint="@color/button_accent" />
 
-            <EditText
-                android:id="@+id/passwordInput"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/passwordLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="12dp"
-                android:background="@android:color/transparent"
-                android:hint="••••••••"
-                android:textColor="@color/text_foreground"
-                android:textColorHint="@color/text_hint"
-                android:textSize="14sp"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone" />
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:hint="••••••••"
+                    android:textColor="@color/text_foreground"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="14sp"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
         <!-- Password Hint -->

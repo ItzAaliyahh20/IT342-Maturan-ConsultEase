@@ -8,6 +8,11 @@ data class RegisterRequest(
     val password: String
 )
 
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
 data class UserResponse(
     val id: Long,
     val email: String,
