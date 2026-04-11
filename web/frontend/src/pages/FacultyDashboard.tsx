@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { GraduationCap } from 'lucide-react';
 import authService from '../auth/authService';
-import Sidebar from '../components/dashboard/Sidebar';
+import FacultySidebar from '../components/faculty/FacultySidebar';
 
-const Dashboard: React.FC = () => {
+const FacultyDashboard: React.FC = () => {
   const navigate = useNavigate();
   const user = authService.getCurrentUser();
 
@@ -13,7 +13,11 @@ const Dashboard: React.FC = () => {
       navigate('/login');
       return;
     }
-    document.title = 'Dashboard | ConsultEase';
+    if (user.role !== 'FACULTY') {
+      navigate('/dashboard');
+      return;
+    }
+    document.title = 'Faculty Dashboard | ConsultEase';
   }, [navigate, user]);
 
   const handleLogout = async () => {
@@ -24,7 +28,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  if (!user) {
+  if (!user || user.role !== 'FACULTY') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
@@ -55,7 +59,7 @@ const Dashboard: React.FC = () => {
       </header>
 
       <div className="flex flex-1 flex-col md:flex-row">
-        <Sidebar onLogout={handleLogout} />
+        <FacultySidebar onLogout={handleLogout} />
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="max-w-6xl mx-auto">
@@ -67,4 +71,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default FacultyDashboard;

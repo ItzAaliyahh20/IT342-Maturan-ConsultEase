@@ -19,7 +19,14 @@ const LoginPage: React.FC = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (authService.isAuthenticated()) {
-      navigate('/dashboard', { replace: true });
+      const currentUser = authService.getCurrentUser();
+      if (currentUser?.role === 'ADMIN') {
+        navigate('/admin', { replace: true });
+      } else if (currentUser?.role === 'FACULTY') {
+        navigate('/faculty', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
   }, [navigate]);
 
@@ -35,6 +42,8 @@ const LoginPage: React.FC = () => {
       // Redirect based on role
       if (response.user.role === 'ADMIN') {
         window.location.href = '/admin';
+      } else if (response.user.role === 'FACULTY') {
+        window.location.href = '/faculty';
       } else {
         window.location.href = '/dashboard';
       }

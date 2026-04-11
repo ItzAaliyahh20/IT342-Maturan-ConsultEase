@@ -1,20 +1,20 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { CalendarCheck2, ClipboardList, LayoutDashboard, LogOut } from 'lucide-react';
+import { CalendarDays, LayoutDashboard, LogOut } from 'lucide-react';
 
-interface SidebarProps {
+interface FacultySidebarProps {
   onLogout: () => void;
 }
 
 const linkBaseClass = 'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors';
 
-const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
+const FacultySidebar: React.FC<FacultySidebarProps> = ({ onLogout }) => {
   return (
     <aside className="w-full md:w-64 bg-white border-r border-gray-200 md:min-h-screen">
       <nav className="p-3 space-y-1">
         <NavLink
           end
-          to="/dashboard"
+          to="/faculty"
           className={({ isActive }) =>
             `${linkBaseClass} ${isActive ? 'bg-amber-100 text-amber-700' : 'text-gray-700 hover:bg-gray-100'}`
           }
@@ -24,23 +24,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
         </NavLink>
 
         <NavLink
-          to="/dashboard/book"
+          to="/faculty/consultation-slots"
           className={({ isActive }) =>
             `${linkBaseClass} ${isActive ? 'bg-amber-100 text-amber-700' : 'text-gray-700 hover:bg-gray-100'}`
           }
         >
-          <CalendarCheck2 className="h-4 w-4" />
-          Book Consultation
-        </NavLink>
-
-        <NavLink
-          to="/dashboard/bookings"
-          className={({ isActive }) =>
-            `${linkBaseClass} ${isActive ? 'bg-amber-100 text-amber-700' : 'text-gray-700 hover:bg-gray-100'}`
-          }
-        >
-          <ClipboardList className="h-4 w-4" />
-          My Bookings
+          <CalendarDays className="h-4 w-4" />
+          Consultation Slots
         </NavLink>
 
         <button
@@ -55,4 +45,4 @@ const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
   );
 };
 
-export default Sidebar;
+export default FacultySidebar;
