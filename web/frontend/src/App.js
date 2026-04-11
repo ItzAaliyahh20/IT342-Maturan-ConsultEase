@@ -4,8 +4,15 @@ import AdminLoginPage from './auth/AdminLoginPage';
 import RegisterPage from './auth/RegisterPage';
 import ChangePasswordPage from './auth/ChangePasswordPage';
 import Dashboard from './pages/Dashboard';
+import DashboardHomePage from './pages/DashboardHomePage';
 import AdminDashboard from './pages/AdminDashboard';
 import AddFacultyPage from './pages/AddFacultyPage';
+import BookConsultationPage from './pages/BookConsultationPage';
+import MyBookingsPage from './pages/MyBookingsPage';
+import FacultyDashboard from './pages/FacultyDashboard';
+import FacultyHomePage from './pages/FacultyHomePage';
+import SlotsPage from './pages/SlotsPage';
+import CreateSlotPage from './pages/CreateSlotPage';
 import authService from './auth/authService';
 
 // Protected Route wrapper component
@@ -28,6 +35,32 @@ const AdminProtectedRoute = ({ children }) => {
   return children;
 };
 
+const StudentProtectedRoute = ({ children }) => {
+  if (!authService.isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const user = authService.getCurrentUser();
+  if (!user || user.role !== 'STUDENT') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
+const FacultyProtectedRoute = ({ children }) => {
+  if (!authService.isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const user = authService.getCurrentUser();
+  if (!user || user.role !== 'FACULTY') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
 function App() {
   return (
     <Routes>
@@ -39,13 +72,46 @@ function App() {
       <Route path="/auth/admin/login" element={<AdminLoginPage />} />
       
       {/* Protected Routes */}
-      <Route 
-        path="/dashboard" 
+      <Route
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
-        } 
+        }
+      >
+        <Route index element={<DashboardHomePage />} />
+        <Route
+          path="book"
+          element={
+            <StudentProtectedRoute>
+              <BookConsultationPage />
+            </StudentProtectedRoute>
+          }
+        />
+        <Route path="bookings" element={<MyBookingsPage />} />
+      </Route>
+
+      <Route
+        path="/faculty"
+        element={
+          <FacultyProtectedRoute>
+            <FacultyDashboard />
+          </FacultyProtectedRoute>
+        }
+      >
+        <Route index element={<FacultyHomePage />} />
+        <Route path="consultation-slots" element={<SlotsPage />} />
+        <Route path="consultation-slots/create" element={<CreateSlotPage />} />
+      </Route>
+
+      <Route
+        path="/consultation-slots"
+        element={
+          <ProtectedRoute>
+            <SlotsPage />
+          </ProtectedRoute>
+        }
       />
       
       {/* Admin Routes - Protected and role-specific */}

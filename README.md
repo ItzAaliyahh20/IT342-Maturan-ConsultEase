@@ -21,6 +21,50 @@ ConsultEase eliminates the need for physical queues by providing a digital platf
 - **Faculty Portal**: Manage availability, view/manage bookings
 - **Admin Dashboard**: Manage faculty accounts, view statistics
 
+### Recent Changes (Consultation Slots & Booking)
+
+#### Main Feature Description
+- Faculty can create and manage consultation slots.
+- Students can browse available slots and create bookings.
+- Faculty can update consultation/booking status for assigned bookings.
+
+#### Inputs and Validations Used
+- Create Consultation Slot
+  - `date` (required)
+  - `startTime` (required)
+  - `duration` (required, minimum: 1)
+- Create Booking
+  - `slotId` (required)
+  - `purpose` (required, non-blank)
+- Business Validation
+  - Only FACULTY can create/delete slots.
+  - Only STUDENT can create bookings.
+  - Slot must exist and must not already be booked.
+  - Faculty can only delete their own slots.
+  - Booked slots cannot be deleted.
+  - Status updates validate allowed booking statuses: `PENDING`, `APPROVED`, `REJECTED`.
+
+#### How the Feature Works
+1. Faculty creates a slot, which is saved as available (`isBooked = false`).
+2. Student selects an available slot and submits booking purpose.
+3. System creates booking with default status `PENDING` and marks slot as booked.
+4. Faculty can later update booking status for consultations assigned to them.
+
+#### API Endpoints Used
+- Consultation Slots
+  - `GET /consultation-slots`
+  - `POST /consultation-slots` (FACULTY)
+  - `DELETE /consultation-slots/{id}` (FACULTY)
+- Bookings
+  - `GET /bookings`
+  - `POST /bookings` (STUDENT)
+  - `PUT /bookings/{id}` (STUDENT/FACULTY/ADMIN with service-level ownership checks)
+
+#### Database Tables Involved
+- `users` (role and ownership checks)
+- `consultation_slots` (slot schedule and availability)
+- `bookings` (slot booking record, purpose, status, student/faculty references)
+
 ## Technology Stack
 
 | Layer | Technology |
@@ -134,17 +178,22 @@ Columns:
 
 ```
 ConsultEase/
-├── frontend/                    # React frontend
-│   ├── src/
-│   │   ├── api/axios.ts        # Axios with interceptors
-│   │   ├── auth/              # Auth components
-│   │   ├── pages/Dashboard.tsx
-│   │   └── App.js             # Routing
+├── web/
+│   └── frontend/               # React frontend
+│       ├── src/
+│       │   ├── api/axios.ts    # Axios with interceptors
+│       │   ├── auth/           # Auth components
+│       │   ├── pages/          # Student/Faculty/Admin pages
+│       │   └── App.js          # Routing
 ├── backend/consultease/        # Spring Boot
 │   └── src/main/java/.../
 │       ├── config/SecurityConfig.java
 │       ├── controller/AuthController.java
+│       ├── controller/ConsultationSlotController.java
+│       ├── controller/BookingController.java
 │       ├── entity/User.java
+│       ├── entity/ConsultationSlot.java
+│       ├── entity/Booking.java
 │       └── security/JwtTokenProvider.java
 └── README.md
 ```
@@ -153,7 +202,7 @@ ConsultEase/
 
 ### Frontend
 ```bash
-cd frontend
+cd web/frontend
 npm install
 npm start
 ```
