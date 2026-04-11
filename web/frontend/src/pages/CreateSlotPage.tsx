@@ -32,6 +32,8 @@ const CreateSlotPage: React.FC = () => {
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
       if (err?.response?.status === 403) {
         setError('Only faculty users can create consultation slots.');
+      } else if (err?.response?.status === 404) {
+        setError('Consultation slot API is not available in the current backend. Expected /consultation-slots or /slots.');
       } else {
         setError(apiMessage || 'Failed to create consultation slot. Please try again.');
       }

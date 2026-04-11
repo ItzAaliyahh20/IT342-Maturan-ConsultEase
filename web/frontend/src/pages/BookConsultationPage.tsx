@@ -25,7 +25,11 @@ const BookConsultationPage: React.FC = () => {
         const response = await bookingService.getSlots();
         setSlots(response);
       } catch (err: any) {
-        setError(err?.response?.data?.message || 'Failed to load slots. Please try again.');
+        if (err?.response?.status === 404) {
+          setError('Slot API is not available in the current backend. Expected /slots, /consultation-slots, or /bookings/slots.');
+        } else {
+          setError(err?.response?.data?.message || 'Failed to load slots. Please try again.');
+        }
       } finally {
         setLoadingSlots(false);
       }
@@ -63,7 +67,9 @@ const BookConsultationPage: React.FC = () => {
       setSuccess('Booking created successfully.');
     } catch (err: any) {
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
-      if (apiMessage) {
+      if (err?.response?.status === 404) {
+        setError('Booking API is not available in the current backend. Expected POST /bookings.');
+      } else if (apiMessage) {
         setError(apiMessage);
       } else {
         setError('Booking failed due to an unexpected error. Please try again.');

@@ -35,6 +35,8 @@ export interface UpdateBookingRequest {
   status?: string;
 }
 
+const SLOT_PATHS = ['/slots', '/consultation-slots', '/bookings/slots'];
+
 const toSlotList = (data: unknown): Slot[] => {
   if (!Array.isArray(data)) {
     return [];
@@ -52,14 +54,18 @@ const toSlotList = (data: unknown): Slot[] => {
 
 export const bookingService = {
   async getSlots(): Promise<Slot[]> {
-    try {
-      const response = await api.get('/slots');
-      return toSlotList(response.data);
-    } catch {
-      // Keep compatibility with projects that expose slots under bookings namespace.
-      const fallbackResponse = await api.get('/bookings/slots');
-      return toSlotList(fallbackResponse.data);
+    let lastError: unknown;
+
+    for (const path of SLOT_PATHS) {
+      try {
+        const response = await api.get(path);
+        return toSlotList(response.data);
+      } catch (error) {
+        lastError = error;
+      }
     }
+
+    throw lastError;
   },
 
   async getBookings(): Promise<Booking[]> {

@@ -23,7 +23,11 @@ const SlotsPage: React.FC = () => {
       setSlots(data);
     } catch (err: any) {
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
-      setError(apiMessage || 'Failed to fetch consultation slots. Please try again.');
+      if (err?.response?.status === 404) {
+        setError('Consultation slot API is not available in the current backend. Expected /consultation-slots or /slots.');
+      } else {
+        setError(apiMessage || 'Failed to fetch consultation slots. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -50,6 +54,8 @@ const SlotsPage: React.FC = () => {
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
       if (err?.response?.status === 403) {
         setError('Only faculty users can delete consultation slots.');
+      } else if (err?.response?.status === 404) {
+        setError('Consultation slot API is not available in the current backend. Expected /consultation-slots/{id} or /slots/{id}.');
       } else {
         setError(apiMessage || 'Unable to delete slot. Booked slots may not be deletable.');
       }

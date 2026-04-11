@@ -24,7 +24,11 @@ const MyBookingsPage: React.FC = () => {
         setBookings(allBookings);
       } catch (err: any) {
         const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
-        setError(apiMessage || 'Failed to fetch bookings. Please try again.');
+        if (err?.response?.status === 404) {
+          setError('Booking API is not available in the current backend. Expected GET /bookings.');
+        } else {
+          setError(apiMessage || 'Failed to fetch bookings. Please try again.');
+        }
       } finally {
         setLoading(false);
       }

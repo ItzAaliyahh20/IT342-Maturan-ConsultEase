@@ -14,6 +14,8 @@ export interface CreateConsultationSlotRequest {
   duration: number;
 }
 
+const SLOT_BASE_PATHS = ['/consultation-slots', '/slots'];
+
 const normalizeSlot = (item: any): ConsultationSlot => {
   return {
     id: Number(item?.id),
@@ -26,23 +28,54 @@ const normalizeSlot = (item: any): ConsultationSlot => {
 
 export const consultationSlotService = {
   async getAll(): Promise<ConsultationSlot[]> {
-    const response = await api.get('/consultation-slots');
-    if (!Array.isArray(response.data)) {
-      return [];
+    let lastError: unknown;
+
+    for (const path of SLOT_BASE_PATHS) {
+      try {
+        const response = await api.get(path);
+        if (!Array.isArray(response.data)) {
+          return [];
+        }
+
+        return response.data
+          .map(normalizeSlot)
+          .filter((slot) => Number.isFinite(slot.id));
+      } catch (error) {
+        lastError = error;
+      }
     }
 
-    return response.data
-      .map(normalizeSlot)
-      .filter((slot) => Number.isFinite(slot.id));
+    throw lastError;
   },
 
   async create(payload: CreateConsultationSlotRequest): Promise<ConsultationSlot> {
-    const response = await api.post('/consultation-slots', payload);
-    return normalizeSlot(response.data);
+    let lastError: unknown;
+
+    for (const path of SLOT_BASE_PATHS) {
+      try {
+        const response = await api.post(path, payload);
+        return normalizeSlot(response.data);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError;
   },
 
   async remove(id: number): Promise<void> {
-    await api.delete(`/consultation-slots/${id}`);
+    let lastError: unknown;
+
+    for (const path of SLOT_BASE_PATHS) {
+      try {
+        await api.delete(`${path}/${id}`);
+        return;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError;
   },
 };
 
