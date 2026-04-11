@@ -4,6 +4,7 @@ import { AlertCircle, PlusCircle } from 'lucide-react';
 import authService from '../auth/authService';
 import SlotTable from '../components/faculty/SlotTable';
 import consultationSlotService, { ConsultationSlot } from '../services/consultationSlotService';
+import bookingService from '../services/bookingService';
 
 const SlotsPage: React.FC = () => {
   const user = authService.getCurrentUser();
@@ -13,6 +14,7 @@ const SlotsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [updatingStatusId, setUpdatingStatusId] = useState<number | null>(null);
 
   const loadSlots = async () => {
     setLoading(true);
@@ -64,6 +66,45 @@ const SlotsPage: React.FC = () => {
     }
   };
 
+  const handleUpdateStatus = async (slot: ConsultationSlot, status: string) => {
+    setError('');
+
+    if (!isFaculty) {
+      setError('Only faculty users can update consultation status.');
+      return;
+    }
+
+    if (!slot.bookingId) {
+      setError('This slot has no booking to update.');
+      return;
+    }
+
+    try {
+      setUpdatingStatusId(slot.id);
+      const updated = await bookingService.updateBooking(slot.bookingId, { status });
+
+      setSlots((prev) =>
+        prev.map((item) =>
+          item.id === slot.id
+            ? {
+                ...item,
+                consultationStatus: updated.status,
+              }
+            : item
+        )
+      );
+    } catch (err: any) {
+      const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
+      if (err?.response?.status === 403) {
+        setError('Only faculty users can update consultation status.');
+      } else {
+        setError(apiMessage || 'Unable to update consultation status.');
+      }
+    } finally {
+      setUpdatingStatusId(null);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <div className="bg-white rounded-lg shadow p-6">
@@ -101,7 +142,9 @@ const SlotsPage: React.FC = () => {
               slots={slots}
               isFaculty={isFaculty}
               deletingId={deletingId}
+              updatingStatusId={updatingStatusId}
               onDelete={handleDelete}
+              onUpdateStatus={handleUpdateStatus}
             />
           )}
         </div>

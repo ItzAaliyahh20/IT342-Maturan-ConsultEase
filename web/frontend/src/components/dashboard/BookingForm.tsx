@@ -1,13 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
-import { CreateBookingRequest, Slot } from '../../services/bookingService';
+import { CreateBookingRequest } from '../../services/bookingService';
 import bookingService from '../../services/bookingService';
+import { ConsultationSlot } from '../../services/consultationSlotService';
 
 interface BookingFormProps {
-  slots: Slot[];
+  slots: ConsultationSlot[];
   userRole?: string;
   loading?: boolean;
   serverError?: string;
+  preselectedFacultyId?: number;
+  preselectedSlotId?: number;
   onSubmit: (payload: CreateBookingRequest) => Promise<void>;
 }
 
@@ -16,16 +19,37 @@ const BookingForm: React.FC<BookingFormProps> = ({
   userRole,
   loading = false,
   serverError,
+  preselectedFacultyId,
+  preselectedSlotId,
   onSubmit,
 }) => {
-  const [slotId, setSlotId] = useState('');
+  const [facultyId, setFacultyId] = useState(preselectedFacultyId ? String(preselectedFacultyId) : '');
+  const [slotId, setSlotId] = useState(preselectedSlotId ? String(preselectedSlotId) : '');
   const [purpose, setPurpose] = useState('');
   const [error, setError] = useState('');
 
-  const slotOptions = useMemo(() => slots.map((slot) => ({
-    ...slot,
-    booked: bookingService.isSlotBooked(slot),
-  })), [slots]);
+  const facultyOptions = useMemo(() => {
+    const unique = new Map<number, string>();
+    slots.forEach((slot) => {
+      if (!bookingService.isSlotBooked(slot) && Number.isFinite(slot.facultyId) && slot.facultyId > 0) {
+        unique.set(slot.facultyId, slot.facultyName || `Faculty #${slot.facultyId}`);
+      }
+    });
+    return Array.from(unique.entries()).map(([id, name]) => ({ id, name }));
+  }, [slots]);
+
+  const slotOptions = useMemo(() => {
+    if (!facultyId) {
+      return [];
+    }
+
+    return slots
+      .filter((slot) => String(slot.facultyId) === facultyId)
+      .map((slot) => ({
+        ...slot,
+        booked: bookingService.isSlotBooked(slot),
+      }));
+  }, [slots, facultyId]);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -63,7 +87,9 @@ const BookingForm: React.FC<BookingFormProps> = ({
     });
 
     setPurpose('');
-    setSlotId('');
+    if (!preselectedSlotId) {
+      setSlotId('');
+    }
   };
 
   return (
@@ -76,21 +102,45 @@ const BookingForm: React.FC<BookingFormProps> = ({
       )}
 
       <div>
+        <label htmlFor="facultyId" className="block text-sm font-medium text-gray-700">
+          Faculty
+        </label>
+        <select
+          id="facultyId"
+          value={facultyId}
+          onChange={(event) => {
+            setFacultyId(event.target.value);
+            setSlotId('');
+          }}
+          className="mt-1.5 w-full border border-gray-300 rounded-md p-2.5 focus:ring-2 focus:ring-amber focus:border-transparent"
+          disabled={loading || Boolean(preselectedFacultyId)}
+          required
+        >
+          <option value="">Select a faculty</option>
+          {facultyOptions.map((faculty) => (
+            <option key={faculty.id} value={faculty.id}>
+              {faculty.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
         <label htmlFor="slotId" className="block text-sm font-medium text-gray-700">
-          Slot ID
+          Available Slot
         </label>
         <select
           id="slotId"
           value={slotId}
           onChange={(event) => setSlotId(event.target.value)}
           className="mt-1.5 w-full border border-gray-300 rounded-md p-2.5 focus:ring-2 focus:ring-amber focus:border-transparent"
-          disabled={loading}
+          disabled={loading || !facultyId}
           required
         >
           <option value="">Select a slot</option>
           {slotOptions.map((slot) => (
             <option key={slot.id} value={slot.id} disabled={slot.booked}>
-              {`Slot #${slot.id}${slot.booked ? ' (Booked)' : ''}`}
+              {`${slot.date} at ${slot.startTime} (${slot.duration} min)${slot.booked ? ' (Booked)' : ''}`}
             </option>
           ))}
         </select>

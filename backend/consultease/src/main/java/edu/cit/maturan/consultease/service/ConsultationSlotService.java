@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.cit.maturan.consultease.dto.ConsultationSlotRequest;
 import edu.cit.maturan.consultease.dto.ConsultationSlotResponse;
+import edu.cit.maturan.consultease.entity.Booking;
 import edu.cit.maturan.consultease.entity.ConsultationSlot;
 import edu.cit.maturan.consultease.entity.User;
 import edu.cit.maturan.consultease.exception.BadRequestException;
@@ -71,6 +72,8 @@ public class ConsultationSlotService {
     }
 
     protected ConsultationSlotResponse toResponse(ConsultationSlot slot) {
+        Booking booking = bookingRepository.findBySlotId(slot.getId()).orElse(null);
+
         return ConsultationSlotResponse.builder()
                 .id(slot.getId())
                 .date(slot.getDate())
@@ -78,6 +81,9 @@ public class ConsultationSlotService {
                 .duration(slot.getDuration())
                 .isBooked(Boolean.TRUE.equals(slot.getIsBooked()))
                 .facultyId(slot.getFaculty().getId())
+            .facultyName(slot.getFaculty().getFullName())
+            .bookingId(booking != null ? booking.getId() : null)
+            .consultationStatus(booking != null ? booking.getStatus().name() : "PENDING")
                 .build();
     }
 }

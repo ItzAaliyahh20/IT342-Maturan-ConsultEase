@@ -1,5 +1,6 @@
 package edu.cit.maturan.consultease.repository;
 
+import java.util.Optional;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByFacultyIdOrderByCreatedAtDesc(Long facultyId);
 
     boolean existsBySlotId(Long slotId);
+
+    Optional<Booking> findBySlotId(Long slotId);
 }

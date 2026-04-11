@@ -1,13 +1,22 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import authService from '../auth/authService';
 import BookingForm from '../components/dashboard/BookingForm';
-import bookingService, { Booking, CreateBookingRequest, Slot } from '../services/bookingService';
+import bookingService, { Booking, CreateBookingRequest } from '../services/bookingService';
+import consultationSlotService, { ConsultationSlot } from '../services/consultationSlotService';
+
+type BookConsultationLocationState = {
+  preselectedFacultyId?: number;
+  preselectedSlotId?: number;
+};
 
 const BookConsultationPage: React.FC = () => {
   const user = authService.getCurrentUser();
-  const [slots, setSlots] = useState<Slot[]>([]);
+  const location = useLocation();
+  const locationState = (location.state || {}) as BookConsultationLocationState;
+
+  const [slots, setSlots] = useState<ConsultationSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -22,11 +31,11 @@ const BookConsultationPage: React.FC = () => {
       setLoadingSlots(true);
       setError('');
       try {
-        const response = await bookingService.getSlots();
+        const response = await consultationSlotService.getAll();
         setSlots(response);
       } catch (err: any) {
         if (err?.response?.status === 404) {
-          setError('Slot API is not available in the current backend. Expected /slots, /consultation-slots, or /bookings/slots.');
+          setError('Slot API is not available in the current backend. Expected /consultation-slots or /slots.');
         } else {
           setError(err?.response?.data?.message || 'Failed to load slots. Please try again.');
         }
@@ -39,7 +48,7 @@ const BookConsultationPage: React.FC = () => {
   }, []);
 
   const openSlots = useMemo(
-    () => slots.filter((slot) => !bookingService.isSlotBooked(slot)),
+    () => slots.filter((slot) => !slot.isBooked),
     [slots]
   );
 
@@ -58,7 +67,8 @@ const BookConsultationPage: React.FC = () => {
             ? {
                 ...slot,
                 isBooked: true,
-                status: 'BOOKED',
+                bookingId: createdBooking.id,
+                consultationStatus: createdBooking.status,
               }
             : slot
         )
@@ -109,6 +119,8 @@ const BookConsultationPage: React.FC = () => {
                 userRole={user?.role}
                 loading={submitting}
                 serverError={error}
+                preselectedFacultyId={locationState.preselectedFacultyId}
+                preselectedSlotId={locationState.preselectedSlotId}
                 onSubmit={handleBooking}
               />
             </div>

@@ -20,4 +20,7 @@ public class ConsultationSlotResponse {
     private Integer duration;
     private Boolean isBooked;
     private Long facultyId;
+    private String facultyName;
+    private Long bookingId;
+    private String consultationStatus;
 }

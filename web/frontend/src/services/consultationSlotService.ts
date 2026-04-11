@@ -6,6 +6,10 @@ export interface ConsultationSlot {
   startTime: string;
   duration: number;
   isBooked: boolean;
+  facultyId: number;
+  facultyName: string;
+  bookingId?: number;
+  consultationStatus?: string;
 }
 
 export interface CreateConsultationSlotRequest {
@@ -23,6 +27,10 @@ const normalizeSlot = (item: any): ConsultationSlot => {
     startTime: item?.startTime || item?.start_time || '',
     duration: Number(item?.duration || 0),
     isBooked: Boolean(item?.isBooked ?? item?.is_booked ?? false),
+    facultyId: Number(item?.facultyId ?? item?.faculty_id ?? 0),
+    facultyName: item?.facultyName || item?.faculty_name || `Faculty #${item?.facultyId ?? item?.faculty_id ?? 'N/A'}`,
+    bookingId: item?.bookingId ?? item?.booking_id,
+    consultationStatus: item?.consultationStatus || item?.consultation_status || 'PENDING',
   };
 };
 
