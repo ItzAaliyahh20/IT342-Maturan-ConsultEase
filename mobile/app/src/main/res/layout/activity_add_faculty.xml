@@ -116,6 +116,27 @@
                             android:textSize="13sp" />
                     </com.google.android.material.card.MaterialCardView>
 
+                    <!-- Success Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/successCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/success_bg"
+                        app:cardCornerRadius="8dp"
+                        app:strokeColor="@color/success_border"
+                        app:strokeWidth="1dp">
+
+                        <TextView
+                            android:id="@+id/successText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="12dp"
+                            android:textColor="@color/success_text"
+                            android:textSize="13sp" />
+                    </com.google.android.material.card.MaterialCardView>
+
                     <!-- Full Name Field -->
                     <TextView
                         android:layout_width="wrap_content"
