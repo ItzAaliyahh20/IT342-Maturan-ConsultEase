@@ -1,0 +1,70 @@
+# Backend - Maven & Spring Boot
+backend/consultease/target/
+backend/consultease/.classpath
+backend/consultease/.project
+backend/consultease/.settings/
+backend/consultease/*.log
+backend/consultease/.DS_Store
+backend/consultease/.idea/
+backend/consultease/*.iml
+
+# Frontend - Node.js & React
+web/frontend/node_modules/
+web/frontend/build/
+web/frontend/dist/
+web/frontend/.env.local
+web/frontend/.env.development.local
+web/frontend/.env.test.local
+web/frontend/.env.production.local
+web/frontend/npm-debug.log*
+web/frontend/yarn-debug.log*
+web/frontend/yarn-error.log*
+web/frontend/.DS_Store
+web/frontend/.idea/
+web/frontend/*.iml
+
+# Mobile - Android/Gradle
+mobile/.gradle
+mobile/.idea
+mobile/build/
+mobile/local.properties
+mobile/*.iml
+mobile/app/build/
+mobile/*.apk
+mobile/*.aab
+mobile/.DS_Store
+mobile/captures/
+mobile/externalNativeBuild/
+mobile/lint_results.xml
+mobile/.cxx/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.classpath
+.project
+.settings/
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Root level
+node_modules/
+dist/
+build/
+*.log
+.DS_Store
