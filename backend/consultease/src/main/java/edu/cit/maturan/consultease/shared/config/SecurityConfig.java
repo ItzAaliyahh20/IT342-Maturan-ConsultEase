@@ -41,14 +41,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers("/auth/register").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers("/auth/logout").permitAll()
+                        // Public auth endpoints - with /api prefix
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/logout").permitAll()
                         // Password change allowed for any authenticated user
-                        .requestMatchers("/auth/change-password").authenticated()
+                        .requestMatchers("/api/auth/change-password").authenticated()
                         // Admin only endpoints
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // All other requests need authentication
                         .anyRequest().authenticated()
                 )

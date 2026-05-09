@@ -60,13 +60,23 @@ class AuthService {
   }
 
   async login(payload: LoginPayload): Promise<AuthResponse> {
-    const response = await this.apiClient.post<AuthResponse>('/auth/login', payload);
-    return response.data;
+    try {
+      const response = await this.apiClient.post<AuthResponse>('/auth/login', payload);
+      return response.data;
+    } catch (error: any) {
+      console.error('Login error:', error);
+      throw error;
+    }
   }
 
   async register(payload: RegisterPayload): Promise<AuthResponse> {
-    const response = await this.apiClient.post<AuthResponse>('/auth/register', payload);
-    return response.data;
+    try {
+      const response = await this.apiClient.post<AuthResponse>('/auth/register', payload);
+      return response.data;
+    } catch (error: any) {
+      console.error('Register error:', error);
+      throw error;
+    }
   }
 
   async createFaculty(payload: CreateFacultyPayload): Promise<User> {

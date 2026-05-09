@@ -76,14 +76,25 @@ const RegisterPage: React.FC = () => {
       // Redirect to dashboard after successful registration
       window.location.href = '/dashboard';
     } catch (err: any) {
+      console.error('Register error details:', {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+      });
+
       if (err.response?.status === 409) {
         setError('An account with this email already exists.');
       } else if (err.response?.data?.message) {
         setError(err.response.data.message);
+      } else if (err.response?.data?.error) {
+        setError(err.response.data.error);
       } else if (err.response?.data?.errors) {
         // Handle validation errors
         const errors = err.response.data.errors;
         setError(Object.values(errors).flat().join(', '));
+      } else if (err.message === 'Network Error' || !err.response) {
+        setError('Cannot connect to server. Please make sure the backend is running on http://localhost:8080');
       } else {
         setError('Registration failed. Please try again.');
       }
