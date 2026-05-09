@@ -35,7 +35,7 @@ export interface UpdateBookingRequest {
   status?: string;
 }
 
-const SLOT_PATHS = ['/slots', '/consultation-slots', '/bookings/slots'];
+const SLOT_PATHS = ['/consultation-slots'];
 
 const toSlotList = (data: unknown): Slot[] => {
   if (!Array.isArray(data)) {

@@ -13,22 +13,30 @@ const CreateSlotPage: React.FC = () => {
 
   useEffect(() => {
     document.title = 'Create Consultation Slot | ConsultEase';
-  }, []);
+    console.log('Current user:', user);
+    console.log('User role:', user?.role);
+    console.log('Is Faculty?', user?.role === 'FACULTY');
+  }, [user]);
 
   const handleCreate = async (payload: CreateConsultationSlotRequest) => {
+    console.log('handleCreate called with payload:', payload);
     setError('');
     setSuccess('');
 
     if (user?.role !== 'FACULTY') {
+      console.log('User is not FACULTY, role is:', user?.role);
       setError('Only faculty users can create consultation slots.');
       return;
     }
 
     try {
       setLoading(true);
+      console.log('Calling consultationSlotService.create...');
       await consultationSlotService.create(payload);
+      console.log('Create succeeded');
       setSuccess('Consultation slot created successfully.');
     } catch (err: any) {
+      console.error('Create failed:', err);
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
       if (err?.response?.status === 403) {
         setError('Only faculty users can create consultation slots.');

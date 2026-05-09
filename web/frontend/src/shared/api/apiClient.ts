@@ -42,3 +42,5 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient().instance;
+
+export default apiClient;

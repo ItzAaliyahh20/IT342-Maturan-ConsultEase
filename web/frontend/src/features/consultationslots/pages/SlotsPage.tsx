@@ -20,10 +20,14 @@ const SlotsPage: React.FC = () => {
     setLoading(true);
     setError('');
 
+    console.log('loadSlots() called');
     try {
+      console.log('Calling consultationSlotService.getAll()...');
       const data = await consultationSlotService.getAll();
+      console.log('Successfully fetched slots:', data);
       setSlots(data);
     } catch (err: any) {
+      console.error('Error loading slots:', err);
       const apiMessage = err?.response?.data?.message || err?.response?.data?.error;
       if (err?.response?.status === 404) {
         setError('Consultation slot API is not available in the current backend. Expected /consultation-slots or /slots.');
@@ -37,6 +41,7 @@ const SlotsPage: React.FC = () => {
 
   useEffect(() => {
     document.title = 'Consultation Slots | ConsultEase';
+    console.log('SlotsPage mounted, calling loadSlots()');
     loadSlots();
   }, []);
 

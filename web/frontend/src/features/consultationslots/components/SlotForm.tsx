@@ -43,11 +43,14 @@ const SlotForm: React.FC<SlotFormProps> = ({ isFaculty, loading, serverError, on
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with values:', { date, startTime, duration });
 
     if (!validate()) {
+      console.log('Validation failed, errors:', errors);
       return;
     }
 
+    console.log('Validation passed, calling onSubmit');
     onSubmit({
       date,
       startTime: `${startTime}:00`,
