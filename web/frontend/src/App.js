@@ -1,19 +1,29 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './auth/LoginPage';
-import AdminLoginPage from './auth/AdminLoginPage';
-import RegisterPage from './auth/RegisterPage';
-import ChangePasswordPage from './auth/ChangePasswordPage';
-import Dashboard from './pages/Dashboard';
-import DashboardHomePage from './pages/DashboardHomePage';
-import AdminDashboard from './pages/AdminDashboard';
-import AddFacultyPage from './pages/AddFacultyPage';
-import BookConsultationPage from './pages/BookConsultationPage';
-import MyBookingsPage from './pages/MyBookingsPage';
-import FacultyDashboard from './pages/FacultyDashboard';
-import FacultyHomePage from './pages/FacultyHomePage';
-import SlotsPage from './pages/SlotsPage';
-import CreateSlotPage from './pages/CreateSlotPage';
-import authService from './auth/authService';
+
+// Auth Feature Imports
+import LoginPage from './features/auth/pages/LoginPage';
+import AdminLoginPage from './features/auth/pages/AdminLoginPage';
+import RegisterPage from './features/auth/pages/RegisterPage';
+import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
+import authService from './features/auth/services/authService';
+
+// Dashboard Feature Imports
+import Dashboard from './features/dashboard/pages/Dashboard';
+import DashboardHomePage from './features/dashboard/pages/DashboardHomePage';
+import FacultyDashboard from './features/dashboard/pages/FacultyDashboard';
+import FacultyHomePage from './features/dashboard/pages/FacultyHomePage';
+
+// Bookings Feature Imports
+import BookConsultationPage from './features/bookings/pages/BookConsultationPage';
+import MyBookingsPage from './features/bookings/pages/MyBookingsPage';
+
+// ConsultationSlots Feature Imports
+import SlotsPage from './features/consultationslots/pages/SlotsPage';
+import CreateSlotPage from './features/consultationslots/pages/CreateSlotPage';
+
+// Admin Feature Imports
+import AdminDashboard from './features/admin/pages/AdminDashboard';
+import AddFacultyPage from './features/admin/pages/AddFacultyPage';
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -82,27 +92,27 @@ function App() {
       >
         <Route index element={<DashboardHomePage />} />
         <Route
-          path="book"
+          path="book-consultation"
           element={
             <StudentProtectedRoute>
               <BookConsultationPage />
             </StudentProtectedRoute>
           }
         />
-        <Route path="bookings" element={<MyBookingsPage />} />
+        <Route path="my-bookings" element={<MyBookingsPage />} />
       </Route>
 
       <Route
         path="/faculty"
         element={
           <FacultyProtectedRoute>
-            <FacultyDashboard />
+            <Dashboard />
           </FacultyProtectedRoute>
         }
       >
         <Route index element={<FacultyHomePage />} />
         <Route path="consultation-slots" element={<SlotsPage />} />
-        <Route path="consultation-slots/create" element={<CreateSlotPage />} />
+        <Route path="create-slot" element={<CreateSlotPage />} />
       </Route>
 
       <Route
@@ -132,7 +142,7 @@ function App() {
         } 
       />
       <Route 
-        path="/change-password" 
+        path="/auth/change-password" 
         element={
           <ProtectedRoute>
             <ChangePasswordPage />
