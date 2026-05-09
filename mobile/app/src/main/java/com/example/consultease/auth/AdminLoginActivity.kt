@@ -6,24 +6,18 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.consultease.R
 import com.example.consultease.auth.model.LoginRequest
 import com.example.consultease.auth.storage.AuthStorage
-import com.example.consultease.dashboard.UserDashboardActivity
+import com.example.consultease.dashboard.AdminDashboardActivity
 import com.example.consultease.network.RetrofitClient
 import com.google.android.material.card.MaterialCardView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StudentLoginActivity : AppCompatActivity() {
-
-    companion object {
-        // Secret code to trigger admin login redirect
-        private const val ADMIN_SECRET_CODE = "admin#secret"
-    }
+class AdminLoginActivity : AppCompatActivity() {
 
     private lateinit var authStorage: AuthStorage
     
@@ -35,20 +29,13 @@ class StudentLoginActivity : AppCompatActivity() {
     private lateinit var loginButtonContent: View
     private lateinit var errorCard: MaterialCardView
     private lateinit var errorText: TextView
-    private lateinit var registerLinkText: TextView
+    private lateinit var backToStudentLogin: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_student_login)
+        setContentView(R.layout.activity_admin_login)
         
         authStorage = AuthStorage(this)
-        
-        // Check if already logged in
-        if (authStorage.getToken() != null) {
-            // Already logged in, check role and redirect
-            redirectBasedOnRole()
-            return
-        }
         
         initViews()
         setupClickListeners()
@@ -62,37 +49,19 @@ class StudentLoginActivity : AppCompatActivity() {
         loginButtonContent = findViewById(R.id.loginButtonContent)
         errorCard = findViewById(R.id.errorCard)
         errorText = findViewById(R.id.errorText)
-        registerLinkText = findViewById(R.id.registerLinkText)
+        backToStudentLogin = findViewById(R.id.backToStudentLogin)
     }
     
     private fun setupClickListeners() {
         // Login button
         loginButton.setOnClickListener {
-            // Check for secret code before normal login
-            val email = emailInput.text.toString().trim()
-            if (email.equals(ADMIN_SECRET_CODE, ignoreCase = true)) {
-                // Secret code detected - redirect to admin login
-                redirectToAdminLogin()
-                return@setOnClickListener
-            }
             performLogin()
         }
         
-        // Register link
-        registerLinkText.setOnClickListener {
-            val intent = Intent(this, StudentRegisterActivity::class.java)
-            startActivity(intent)
+        // Back to student login
+        backToStudentLogin.setOnClickListener {
+            finish()
         }
-    }
-    
-    private fun redirectToAdminLogin() {
-        // Clear the inputs for security
-        emailInput.text?.clear()
-        passwordInput.text?.clear()
-        
-        // Redirect to admin login screen
-        val intent = Intent(this, AdminLoginActivity::class.java)
-        startActivity(intent)
     }
     
     private fun performLogin() {
@@ -129,15 +98,15 @@ class StudentLoginActivity : AppCompatActivity() {
                     // Store auth data
                     authStorage.setAuth(authResponse)
                     
-                    // Get user role and validate
+                    // Get user role and validate - ONLY allow ADMIN role
                     val user = authResponse.user
-                    if (user.role.uppercase() == "STUDENT") {
-                        // Student role - redirect to user dashboard
-                        redirectToUserDashboard()
+                    if (user.role.uppercase() == "ADMIN") {
+                        // Admin role - redirect to admin dashboard
+                        redirectToAdminDashboard()
                     } else {
-                        // Not a student - show error and clear auth
+                        // Not an admin - show error and clear auth
                         authStorage.clear()
-                        showError("Access denied. This login is for student users only. Please use the admin portal for faculty/administrator access.")
+                        showError("Access denied. This login is for administrator users only.")
                     }
                 } else {
                     // Handle error response
@@ -161,18 +130,8 @@ class StudentLoginActivity : AppCompatActivity() {
         })
     }
     
-    private fun redirectBasedOnRole() {
-        val user = authStorage.getUser()
-        if (user != null && user.role.uppercase() == "STUDENT") {
-            redirectToUserDashboard()
-        } else {
-            // Not a valid student session, clear and show login
-            authStorage.clear()
-        }
-    }
-    
-    private fun redirectToUserDashboard() {
-        val intent = Intent(this, UserDashboardActivity::class.java)
+    private fun redirectToAdminDashboard() {
+        val intent = Intent(this, AdminDashboardActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
