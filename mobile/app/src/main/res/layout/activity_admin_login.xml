@@ -12,44 +12,46 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Spacer for centering -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <!-- Admin Portal Header with Shield -->
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="32dp"
+            android:paddingBottom="24dp">
 
-            <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:src="@drawable/ic_shield"
-                app:tint="@color/button_accent" />
+            <FrameLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/amber_light">
+
+                <ImageView
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_admin_shield"
+                    app:tint="@color/button_accent" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Admin Portal"
+                android:layout_marginBottom="6dp"
+                android:text="Admin Login"
                 android:textColor="@color/text_foreground"
                 android:textSize="24sp"
                 android:textStyle="bold" />
-        </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:gravity="center"
-            android:text="Sign in to continue to administration"
-            android:textColor="@color/text_muted"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Sign in with admin credentials"
+                android:textColor="@color/text_muted"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <!-- Error Card -->
         <com.google.android.material.card.MaterialCardView
@@ -86,31 +88,31 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
+            android:background="@drawable/edit_text_background"
             android:gravity="center_vertical"
-            android:background="@drawable/edit_text_background">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="12dp"
                 android:src="@drawable/ic_mail_outline"
-                app:tint="@color/text_muted" />
+                app:tint="@color/button_accent" />
 
             <EditText
                 android:id="@+id/emailInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="12dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="admin@university.edu"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
                 android:textColor="@color/text_foreground"
                 android:textColorHint="@color/text_hint"
-                android:textSize="14sp"
-                android:inputType="textEmailAddress"
-                android:imeOptions="actionNext" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Password Field -->
@@ -127,71 +129,67 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="20dp"
-            android:orientation="horizontal"
+            android:background="@drawable/edit_text_background"
             android:gravity="center_vertical"
-            android:background="@drawable/edit_text_background">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="12dp"
                 android:src="@drawable/ic_lock_outline"
-                app:tint="@color/text_muted" />
+                app:tint="@color/button_accent" />
 
             <EditText
                 android:id="@+id/passwordInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="12dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="••••••••"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:textColor="@color/text_foreground"
                 android:textColorHint="@color/text_hint"
-                android:textSize="14sp"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone" />
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Login Button with Loading State -->
+        <!-- Login Button -->
         <FrameLayout
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_amber_gradient">
 
-            <!-- Loading Spinner (hidden by default) -->
             <ProgressBar
                 android:id="@+id/loadingSpinner"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:indeterminateTint="@android:color/white" />
+                android:indeterminateTint="@android:color/white"
+                android:visibility="gone" />
 
-            <!-- Button Content -->
             <LinearLayout
                 android:id="@+id/loginButtonContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/bg_amber_gradient"
+                android:orientation="horizontal"
                 android:paddingHorizontal="16dp">
 
                 <TextView
-                    android:id="@+id/loginButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign In to Admin"
+                    android:text="Sign In"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/loginButtonIcon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
@@ -200,25 +198,32 @@
             </LinearLayout>
         </FrameLayout>
 
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="16dp"
-            android:background="@color/border_gray" />
-
-        <!-- Return to User Login -->
-        <TextView
-            android:id="@+id/returnToUserLogin"
+        <!-- Back to Student Login -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="8dp"
-            android:text="← Return to user login"
-            android:textColor="@color/button_accent"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
 
-        <!-- Authorized Administrators Only Note -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not an admin? "
+                android:textColor="@color/text_muted"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/backToStudentLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back to user login"
+                android:textColor="@color/button_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Faculty/Admin Note -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -226,15 +231,6 @@
             android:paddingBottom="24dp"
             android:text="Authorized administrators only"
             android:textColor="@color/text_muted"
-            android:textSize="12sp"
-            android:textStyle="italic" />
-
-        <!-- Spacer for centering -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-
-            />
+            android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

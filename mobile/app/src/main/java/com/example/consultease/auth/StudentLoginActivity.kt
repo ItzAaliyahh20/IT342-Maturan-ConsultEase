@@ -20,6 +20,11 @@ import retrofit2.Response
 
 class StudentLoginActivity : AppCompatActivity() {
 
+    companion object {
+        // Secret code to trigger admin login redirect
+        private const val ADMIN_SECRET_CODE = "admin#secret"
+    }
+
     private lateinit var authStorage: AuthStorage
     
     // Views
@@ -63,6 +68,13 @@ class StudentLoginActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         // Login button
         loginButton.setOnClickListener {
+            // Check for secret code before normal login
+            val email = emailInput.text.toString().trim()
+            if (email.equals(ADMIN_SECRET_CODE, ignoreCase = true)) {
+                // Secret code detected - redirect to admin login
+                redirectToAdminLogin()
+                return@setOnClickListener
+            }
             performLogin()
         }
         
@@ -71,6 +83,16 @@ class StudentLoginActivity : AppCompatActivity() {
             val intent = Intent(this, StudentRegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+    
+    private fun redirectToAdminLogin() {
+        // Clear the inputs for security
+        emailInput.text?.clear()
+        passwordInput.text?.clear()
+        
+        // Redirect to admin login screen
+        val intent = Intent(this, AdminLoginActivity::class.java)
+        startActivity(intent)
     }
     
     private fun performLogin() {

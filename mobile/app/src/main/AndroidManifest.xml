@@ -47,6 +47,21 @@
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Consultease" />
+
+        <activity
+            android:name=".auth.AdminLoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Consultease" />
+
+        <activity
+            android:name=".dashboard.AdminDashboardActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Consultease" />
+
+        <activity
+            android:name=".dashboard.AddFacultyActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Consultease" />
     </application>
 
 </manifest>

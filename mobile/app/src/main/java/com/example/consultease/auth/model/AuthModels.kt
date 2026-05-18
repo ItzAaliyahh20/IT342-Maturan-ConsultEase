@@ -37,3 +37,10 @@ data class ApiErrorResponse(
     @SerializedName("errors")
     val validationErrors: Map<String, String>? = null
 )
+
+data class CreateFacultyRequest(
+    val fullName: String,
+    val email: String,
+    val department: String,
+    val password: String
+)
